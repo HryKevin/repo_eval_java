@@ -1,5 +1,118 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MakeEasier.</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #F1A66A;
+            --dark-color: #333333;
+            --light-color: #FEFEFE;
+        }
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #e6955a 100%);
+            color: var(--light-color);
+        }
+        .feature-card {
+            transition: transform 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(241, 166, 106, 0.15);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: #e6955a;
+            border-color: #e6955a;
+        }
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+    </style>
+</head>
 <body>
-<h2>Hello World !</h2>
+<div class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">TODO List Application</h1>
+                <p class="lead mb-4">Gérez vos tâches et utilisateurs avec une interface moderne et intuitive.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-light border" style="background-color: #f8f9fa;">
+                <h5 class="alert-heading" style="color: var(--dark-color);">Bienvenue !</h5>
+                <p class="mb-0" th:text="${message}" style="color: var(--dark-color);">Votre application de gestion de tâches est prête à l'emploi.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card feature-card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-people text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1" style="color: var(--dark-color);">Utilisateurs</h4>
+                            <p class="text-muted mb-0">Gestion des utilisateurs</p>
+                        </div>
+                    </div>
+                    <p class="card-text" style="color: var(--dark-color);">Consultez la liste des utilisateurs et accédez à leurs informations détaillées.</p>
+                    <a href="/users" class="btn btn-primary">Voir les utilisateurs</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card feature-card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-check2-square text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1" style="color: var(--dark-color);">Tâches</h4>
+                            <p class="text-muted mb-0">Gestion des tâches</p>
+                        </div>
+                    </div>
+                    <p class="card-text" style="color: var(--dark-color);">Visualisez toutes les tâches avec leur statut et leurs informations.</p>
+                    <a href="/tasks" class="btn btn-primary">Voir les tâches</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

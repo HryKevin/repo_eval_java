@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Liste des Tâches</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #F1A66A;
+            --dark-color: #333333;
+            --light-color: #FEFEFE;
+        }
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #e6955a 100%);
+            color: var(--light-color);
+        }
+        .task-card {
+            transition: transform 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        .task-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(241, 166, 106, 0.15);
+        }
+        .completed {
+            border-left: 4px solid #28a745 !important;
+        }
+        .pending {
+            border-left: 4px solid #ffc107 !important;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: #e6955a;
+            border-color: #e6955a;
+        }
+        .btn-outline-secondary {
+            color: var(--dark-color);
+            border-color: var(--dark-color);
+        }
+        .btn-outline-secondary:hover {
+            background-color: var(--dark-color);
+            border-color: var(--dark-color);
+        }
+        .btn-outline-primary {
+            color: var(--dark-color);
+            border-color: var(--dark-color);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--dark-color);
+            border-color: var(--dark-color);
+        }
+        .btn-outline-danger {
+            color: var(--dark-color);
+            border-color: var(--dark-color);
+        }
+        .btn-outline-danger:hover {
+            background-color: var(--dark-color);
+            border-color: var(--dark-color);
+        }
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+    </style>
+</head>
+<body>
+<div class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Tâches</h1>
+                <p class="lead mb-4">Gérez vos tâches et leur statut</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="/tasks/new" class="btn btn-light btn-lg me-2">
+                    <i class="bi bi-plus"></i> Nouvelle tâche
+                </a>
+                <a href="/" class="btn btn-outline-light btn-lg">Accueil</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> <span th:text="${success}">Message de succès</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${tasks.empty}" class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> Aucune tâche trouvée.
+    </div>
+
+    <div class="row g-4" th:unless="${tasks.empty}">
+        <div th:each="task : ${tasks}" class="col-md-6 col-lg-4">
+            <div class="card task-card h-100 border-0 shadow-sm" th:classappend="${task.completed ? 'completed' : 'pending'}">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title mb-0" style="color: var(--dark-color);" th:text="${task.title}">Titre de la tâche</h5>
+                        <span th:if="${task.completed}" class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Terminée
+                            </span>
+                        <span th:unless="${task.completed}" class="badge bg-warning text-dark">
+                                <i class="bi bi-clock"></i> En cours
+                            </span>
+                    </div>
+
+                    <p class="card-text mb-3" style="color: var(--dark-color);" th:text="${task.description}">Description</p>
+
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="bi bi-person"></i>
+                            <span th:if="${task.owner != null}" th:text="${task.owner.firstName + ' ' + task.owner.lastName}">Utilisateur</span>
+                            <span th:unless="${task.owner != null}">Non assigné</span>
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar"></i>
+                            <span th:if="${task.createdAt != null}" th:text="${#temporals.format(task.createdAt, 'dd/MM/yyyy HH:mm')}">Date</span>
+                            <span th:unless="${task.createdAt != null}">Date inconnue</span>
+                        </small>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/tasks/{id}(id=${task.id})}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-eye"></i> Voir
+                        </a>
+                        <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil"></i> Modifier
+                        </a>
+                        <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
